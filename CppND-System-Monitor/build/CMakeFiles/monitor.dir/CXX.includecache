@@ -6,31 +6,49 @@
 
 #IncludeRegexTransform: 
 
-../include/linux_parser.h
-fstream
--
-regex
--
+../include/format.h
 string
 -
+
+../include/ncurses_display.h
+curses.h
+-
+process.h
+../include/process.h
+system.h
+../include/system.h
 
 ../include/process.h
 string
 -
 
-/home/gu9n5ri/data/repos/udacity_cpp/CppND-System-Monitor/src/process.cpp
-process.h
-/home/gu9n5ri/data/repos/udacity_cpp/CppND-System-Monitor/src/process.h
-unistd.h
--
-cctype
--
-sstream
--
+../include/processor.h
+
+../include/system.h
 string
 -
 vector
 -
-linux_parser.h
-/home/gu9n5ri/data/repos/udacity_cpp/CppND-System-Monitor/src/linux_parser.h
+process.h
+../include/process.h
+processor.h
+../include/processor.h
+
+/home/gu9n5ri/data/repos/udacity_nd_cpp/CppND-System-Monitor/src/ncurses_display.cpp
+ncurses_display.h
+/home/gu9n5ri/data/repos/udacity_nd_cpp/CppND-System-Monitor/src/ncurses_display.h
+curses.h
+-
+chrono
+-
+string
+-
+thread
+-
+vector
+-
+format.h
+/home/gu9n5ri/data/repos/udacity_nd_cpp/CppND-System-Monitor/src/format.h
+system.h
+/home/gu9n5ri/data/repos/udacity_nd_cpp/CppND-System-Monitor/src/system.h
 

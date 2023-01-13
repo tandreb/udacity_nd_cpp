@@ -13,19 +13,17 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-Process::Process(int pid) : pid_(pid) {
-  CpuUtilization();
-}
+Process::Process(int pid) : pid_(pid) { CpuUtilization(); }
 
 // DONE: Return this process's ID
 int Process::Pid() { return pid_; }
 
 // DONE: Return this process's CPU utilization
 float Process::CpuUtilization() {
-   int systemUptime = LinuxParser::UpTime();
-   int totalTimeActive = LinuxParser::ActiveJiffies(pid_);
-   int processUpTime = LinuxParser::UpTime(pid_);
-   int totalTimeSinceStartUp = systemUptime - processUpTime;
+  int systemUptime = LinuxParser::UpTime();
+  int totalTimeActive = LinuxParser::ActiveJiffies(pid_);
+  int processUpTime = LinuxParser::UpTime(pid_);
+  int totalTimeSinceStartUp = systemUptime - processUpTime;
   cpuUtilization_ = (1.0 * totalTimeActive) / totalTimeSinceStartUp;
 
   return (cpuUtilization_);
