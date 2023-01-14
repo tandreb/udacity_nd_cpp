@@ -13,24 +13,28 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-Process::Process(int pid) : pid_(pid) { CpuUtilization(); }
+Process::Process(int pid) : pid_(pid) {
+  CpuUtilization();
+  command_ = LinuxParser::Command(pid_);
+}
 
 // DONE: Return this process's ID
 int Process::Pid() { return pid_; }
 
 // DONE: Return this process's CPU utilization
 float Process::CpuUtilization() {
-  int systemUptime = LinuxParser::UpTime();
   int totalTimeActive = LinuxParser::ActiveJiffies(pid_);
   int processUpTime = LinuxParser::UpTime(pid_);
-  int totalTimeSinceStartUp = systemUptime - processUpTime;
-  cpuUtilization_ = (1.0 * totalTimeActive) / totalTimeSinceStartUp;
+
+  cpuUtilization_ = (1.0 * totalTimeActive) / processUpTime;
 
   return (cpuUtilization_);
 }
 
 // DONE: Return the command that generated this process
-string Process::Command() { return LinuxParser::Command(pid_); }
+// only returning stored value which is read out once during construction of
+// process as this value won't change during runtime of the process
+string Process::Command() { return command_; }
 
 // DONE: Return this process's memory utilization
 string Process::Ram() { return LinuxParser::Ram(pid_); }

@@ -1,3 +1,0 @@
-/home/gu9n5ri/data/repos/udacity_nd_cpp/CppND-System-Monitor/build/CMakeFiles/rebuild_cache.dir
-/home/gu9n5ri/data/repos/udacity_nd_cpp/CppND-System-Monitor/build/CMakeFiles/edit_cache.dir
-/home/gu9n5ri/data/repos/udacity_nd_cpp/CppND-System-Monitor/build/CMakeFiles/monitor.dir

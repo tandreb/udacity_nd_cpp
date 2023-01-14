@@ -61,7 +61,7 @@ vector<int> LinuxParser::Pids() {
       string filename(file->d_name);
       if (std::all_of(filename.begin(), filename.end(), isdigit)) {
         int pid = stoi(filename);
-        pids.push_back(pid);
+        pids.emplace_back(pid);
       }
     }
   }
@@ -74,8 +74,9 @@ float LinuxParser::MemoryUtilization() {
   const string filepath(kProcDirectory + kMeminfoFilename);
 
   float totalMemory =
-      readSimpleValueFromFile<float>(filepath, "MemTotal:");
-  float freeMemory = readSimpleValueFromFile<float>(filepath, "MemFree:");
+      readSimpleValueFromFile<float>(filepath, filterMemTotalString);
+  float freeMemory =
+      readSimpleValueFromFile<float>(filepath, filterMemFreeString);
 
   float memoryUsage = (totalMemory - freeMemory) / totalMemory;
   return memoryUsage;
@@ -161,7 +162,7 @@ vector<string> LinuxParser::CpuUtilization() {
     linestream >> cpu;
 
     while (linestream >> value) {
-      jiffies.push_back(value);
+      jiffies.emplace_back(value);
     }
   }
   return jiffies;
@@ -170,13 +171,13 @@ vector<string> LinuxParser::CpuUtilization() {
 // DONE: Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
   return readSimpleValueFromFile<int>(kProcDirectory + kStatFilename,
-                                      "processes");
+                                      filterProcesses);
 }
 
 // DONE: Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
   string filepath = kProcDirectory + kStatFilename;
-  return readSimpleValueFromFile<int>(filepath, "procs_running");
+  return readSimpleValueFromFile<int>(filepath, filterRunningProcesses);
 }
 
 // DONE: Read and return the command associated with a process
@@ -198,7 +199,7 @@ string LinuxParser::Command(int pid) {
 // REMOVE:  once you define the function
 string LinuxParser::Ram(int pid) {
   int ram = readSimpleValueFromFile<int>(
-      kProcDirectory + to_string(pid) + kStatusFilename, "VmSize:");
+      kProcDirectory + to_string(pid) + kStatusFilename, filterProcMem);
   int ramInMb = ram / 1000;
   return to_string(ramInMb);
 }
@@ -208,7 +209,7 @@ string LinuxParser::Ram(int pid) {
 string LinuxParser::Uid(int pid) {
   string uid = "0000";
   uid = readSimpleValueFromFile<string>(
-      kProcDirectory + to_string(pid) + kStatusFilename, "Uid:");
+      kProcDirectory + to_string(pid) + kStatusFilename, filterUID);
   return uid;
 }
 
@@ -242,19 +243,21 @@ string LinuxParser::User(int pid) {
 // DONE: Read and return the uptime of a process
 // REMOVE:  once you define the function
 long LinuxParser::UpTime(int pid) {
-  long upTimeInClockTicks = 0;
-
+  long startTime = 0;
+  long systemStart = 0;
   std::ifstream ifStream(kProcDirectory + to_string(pid) + kStatFilename);
   if (ifStream.is_open()) {
+    string line, value;
     const int position = 22;
-    std::string value;
-    for (int i = 0; i < position; i++) {
-      if (!(ifStream >> value)) {
-        return 10000;
-      }
-    }
-    upTimeInClockTicks = std::stol(value);
-  }
+    std::getline(ifStream, line);
+    std::istringstream stringstream(line);
 
-  return upTimeInClockTicks / sysconf(_SC_CLK_TCK);
+    for (auto i = 0; i < position; i++) {
+      stringstream >> value;
+    }
+
+    startTime = std::stol(value) / sysconf(_SC_CLK_TCK);
+    systemStart = LinuxParser::UpTime();
+  }
+  return systemStart - startTime;
 }
