@@ -1,6 +1,7 @@
 #include <wx/filename.h>
 #include <wx/colour.h>
 #include <wx/image.h>
+#include <memory>
 #include <string>
 #include "chatbot.h"
 #include "chatlogic.h"
@@ -118,7 +119,9 @@ ChatBotPanelDialog::ChatBotPanelDialog(wxWindow *parent, wxWindowID id)
     ////
 
     // create chat logic instance
-    _chatLogic = new ChatLogic(); 
+    // task 1
+    //_chatLogic = new ChatLogic(); 
+    _chatLogic = std::make_unique<ChatLogic>();
 
     // pass pointer to chatbot dialog so answers can be displayed in GUI
     _chatLogic->SetPanelDialogHandle(this);
@@ -134,11 +137,17 @@ ChatBotPanelDialog::~ChatBotPanelDialog()
 {
     //// STUDENT CODE
     ////
-
-    delete _chatLogic;
+    // task 1
+    //delete _chatLogic; // not needed anymore as it is now a unique_ptr
 
     ////
     //// EOF STUDENT CODE
+}
+
+// no task but moving this here instead of .h
+ChatLogic * ChatBotPanelDialog::GetChatLogicHandle() 
+{ 
+    return (_chatLogic.get()); 
 }
 
 void ChatBotPanelDialog::AddDialogItem(wxString text, bool isFromUser)
