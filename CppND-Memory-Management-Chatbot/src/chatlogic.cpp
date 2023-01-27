@@ -11,48 +11,6 @@
 #include "graphedge.h"
 #include "graphnode.h"
 
-ChatLogic::ChatLogic() {
-  //// STUDENT CODE
-  ////
-
-  // create instance of chatbot
-  // task 5
-  //   _chatBot = new ChatBot("../images/chatbot.png");
-
-  // add pointer to chatlogic so that chatbot answers can be passed on to the
-  // GUI
-  // task 5
-  //   _chatBot->SetChatLogicHandle(this);
-
-  ////
-  //// EOF STUDENT CODE
-}
-
-ChatLogic::~ChatLogic() {
-  //// STUDENT CODE
-  ////
-
-  // delete chatbot instance
-  // delete _chatBot;
-
-  // task 3
-  // delete all nodes
-  // for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
-  // {
-  //     delete *it;
-  // }
-
-  // // delete all edges
-  // task 4
-  // for (auto it = std::begin(_edges); it != std::end(_edges); ++it)
-  // {
-  //     delete *it;
-  // }
-
-  ////
-  //// EOF STUDENT CODE
-}
-
 template <typename T>
 void ChatLogic::AddAllTokensToElement(std::string tokenID, tokenlist &tokens,
                                       T &element) {
@@ -132,7 +90,6 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
             ////
 
             // check if node with this ID exists already
-            // task 3
             auto newNode =
                 std::find_if(_nodes.begin(), _nodes.end(),
                              [&id](std::unique_ptr<GraphNode> &node) {
@@ -141,7 +98,6 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
 
             // create new element if ID does not yet exist
             if (newNode == _nodes.end()) {
-              // task 3
               _nodes.emplace_back(std::make_unique<GraphNode>(id));
               newNode = _nodes.end() - 1; // get iterator to last element
 
@@ -172,13 +128,11 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
 
             if (parentToken != tokens.end() && childToken != tokens.end()) {
               // get iterator on incoming and outgoing node via ID search
-              // task 3
               auto parentNode = std::find_if(
                   _nodes.begin(), _nodes.end(),
                   [&parentToken](std::unique_ptr<GraphNode> &node) {
                     return node->GetID() == std::stoi(parentToken->second);
                   });
-              // task 3
               auto childNode = std::find_if(
                   _nodes.begin(), _nodes.end(),
                   [&childToken](std::unique_ptr<GraphNode> &node) {
@@ -186,22 +140,14 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
                   });
 
               // create new edge
-              // task 4
-              // GraphEdge *edge = new GraphEdge(id);
               std::unique_ptr<GraphEdge> edge = std::make_unique<GraphEdge>(id);
               edge->SetChildNode((*childNode).get());
               edge->SetParentNode((*parentNode).get());
-
-              // task 4
-              // _edges.push_back(edge);
 
               // find all keywords for current node
               AddAllTokensToElement("KEYWORD", tokens, *edge);
 
               // store reference in child node and parent node
-              // task 4
-              // (*childNode)->AddEdgeToParentNode(edge);
-              // (*parentNode)->AddEdgeToChildNode(edge);
               (*childNode)->AddEdgeToParentNode(edge.get());
               (*parentNode)->AddEdgeToChildNode(std::move(edge));
             }
@@ -233,21 +179,15 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename) {
     if ((*it)->GetNumberOfParents() == 0) {
 
       if (rootNode == nullptr) {
-        // task 3
         rootNode = (*it).get(); // assign current node to root
       } else {
         std::cout << "ERROR : Multiple root nodes detected" << std::endl;
       }
     }
   }
-  // task 5
-  ChatBot chatBot{"../images/chatbot.png"};
+
+  ChatBot chatBot("../images/chatbot.png");
   chatBot.SetChatLogicHandle(this);
-
-  // add chatbot to graph root node
-  // _chatBot->SetRootNode(rootNode);
-  // rootNode->MoveChatbotHere(_chatBot);
-
   chatBot.SetRootNode(rootNode);
   rootNode->MoveChatbotHere(std::move(chatBot));
 
