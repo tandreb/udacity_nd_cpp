@@ -1,64 +1,68 @@
 #ifndef GRAPHNODE_H_
 #define GRAPHNODE_H_
 
-#include <vector>
-#include <string>
 #include "chatbot.h"
 #include <memory>
+#include <string>
+#include <vector>
 
 // forward declarations
 class GraphEdge;
 
-class GraphNode
-{
+class GraphNode {
 private:
-    //// STUDENT CODE
-    ////
+  //// STUDENT CODE
+  ////
 
-    // data handles (owned)
-    // task 4
-    // std::vector<GraphEdge *> _childEdges;  
-    std::vector<std::unique_ptr<GraphEdge>> _childEdges; // edges to subsequent nodes
-    
-    // data handles (not owned)
-    std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes 
-    ChatBot *_chatBot;
+  // data handles (owned)
+  // task 4
+  // std::vector<GraphEdge *> _childEdges;
+  std::vector<std::unique_ptr<GraphEdge>>
+      _childEdges; // edges to subsequent nodes
 
-    ////
-    //// EOF STUDENT CODE
+  // data handles (not owned)
+  std::vector<GraphEdge *> _parentEdges; // edges to preceding nodes
 
-    // proprietary members
-    int _id;
-    std::vector<std::string> _answers;
+  // task 5
+  //   ChatBot *_chatBot;
+  ChatBot _chatBot;
+
+  ////
+  //// EOF STUDENT CODE
+
+  // proprietary members
+  int _id;
+  std::vector<std::string> _answers;
 
 public:
-    // constructor / destructor
-    GraphNode(int id);
-    ~GraphNode();
+  // constructor / destructor
+  GraphNode(int id);
+  ~GraphNode();
 
-    // getter / setter
-    int GetID() { return _id; }
-    int GetNumberOfChildEdges() { return _childEdges.size(); }
-    GraphEdge *GetChildEdgeAtIndex(int index);
-    std::vector<std::string> GetAnswers() { return _answers; }
-    int GetNumberOfParents() { return _parentEdges.size(); }
+  // getter / setter
+  int GetID() { return _id; }
+  int GetNumberOfChildEdges() { return _childEdges.size(); }
+  GraphEdge *GetChildEdgeAtIndex(int index);
+  std::vector<std::string> GetAnswers() { return _answers; }
+  int GetNumberOfParents() { return _parentEdges.size(); }
 
-    // proprietary functions
-    void AddToken(std::string token); // add answers to list
-    void AddEdgeToParentNode(GraphEdge *edge);
-    // task 4
-    // void AddEdgeToChildNode(GraphEdge *edge);
-    void AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge);
+  // proprietary functions
+  void AddToken(std::string token); // add answers to list
+  void AddEdgeToParentNode(GraphEdge *edge);
+  // task 4
+  // void AddEdgeToChildNode(GraphEdge *edge);
+  void AddEdgeToChildNode(std::unique_ptr<GraphEdge> edge);
 
-    //// STUDENT CODE
-    ////
+  //// STUDENT CODE
+  ////
 
-    void MoveChatbotHere(ChatBot *chatbot);
+  //   void MoveChatbotHere(ChatBot *chatbot);
+  void MoveChatbotHere(ChatBot chatbot);
 
-    ////
-    //// EOF STUDENT CODE
+  ////
+  //// EOF STUDENT CODE
 
-    void MoveChatbotToNewNode(GraphNode *newNode);
+  void MoveChatbotToNewNode(GraphNode *newNode);
 };
 
 #endif /* GRAPHNODE_H_ */
