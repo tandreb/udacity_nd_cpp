@@ -4,6 +4,14 @@
 
 GraphNode::GraphNode(int id) { _id = id; }
 
+GraphNode::~GraphNode() {
+  //// STUDENT CODE
+  ////
+
+  ////
+  //// EOF STUDENT CODE
+}
+
 void GraphNode::AddToken(std::string token) { _answers.push_back(token); }
 
 void GraphNode::AddEdgeToParentNode(GraphEdge *edge) {
